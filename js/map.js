@@ -1,9 +1,9 @@
 var initialLocations = [
         {
-            streetAddress: 'Journey Into Imagination',
+            streetAddress: 'Cinderella Castle',
             city: 'Walt Disney World',
             state: 'FL',
-            latlng: [28.3730082, -81.5511566]
+            latlng: [28.4194019,-81.5814004]
         },
         {
             streetAddress: 'Space Mountain',
@@ -30,7 +30,7 @@ var initialLocations = [
             latlng: [28.417988, -81.583436]
         }
     ];
-var map;
+
 var Location = function(data) {
     this.streetAddress = ko.observable(data.streetAddress);
     this.city = ko.observable(data.city);
@@ -112,12 +112,35 @@ var ViewModel = function () {
     //         title: "Test"
     //     });
 
-
 };
 
 var ViewModel = new ViewModel();
 // ko.applyBindings(new ViewModel());
 ko.applyBindings(ViewModel);
+
+var mapOptions = {
+            center: new google.maps.LatLng(28.4194019,-81.5814004),
+            disableDefaultUI: true,
+            mapTypeId: google.maps.MapTypeId.SATELLITE,
+            zoom: 17
+        };
+var map = new google.maps.Map(document.querySelector('#map'), mapOptions);
+
+ViewModel.filteredItems().forEach(function(item) {
+    console.log(item);
+    var marker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(item.latlng()[0], item.latlng()[1]),
+            title: item.completeAddress()
+        });
+})
+
+// console.log(ViewModel.filteredItems());
+// var marker = new google.maps.Marker({
+//             map: map,
+//             position: new google.maps.LatLng(28.418896, -81.578173),
+//             title: "Test"
+//         });
 
 //console.log(ViewModel.filteredItems());
 
