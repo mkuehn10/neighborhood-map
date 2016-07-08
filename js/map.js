@@ -31,7 +31,9 @@ var initialLocations = [
         }
     ];
 
-var Location = function(data) {
+
+
+var Location = function(data, map) {
     this.streetAddress = ko.observable(data.streetAddress);
     this.city = ko.observable(data.city);
     this.state = ko.observable(data.state);
@@ -44,73 +46,79 @@ var Location = function(data) {
     this.completeAddress = ko.computed(function () {
         return this.streetAddress() + ", " + this.cityState();
     }, this);
+
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(this.latlng()[0], this.latlng()[1])
+    });
+    // console.log(this.latlng()[0])
+    //console.log(map);
+    //marker.setMap(map);
+    this.isVisible = ko.observable(false);
+
+    this.isVisible.subscribe(function(currentState) {
+        if (currentState) {
+            marker.setMap(map);
+        } else {
+            marker.setMap(null);
+        }
+    });
+
+  this.isVisible(true);
+
 };
 
 var ViewModel = function () {
     var self = this;
+    var mapOptions = {
+            center: new google.maps.LatLng(28.4194019,-81.5814004),
+            disableDefaultUI: true,
+            mapTypeId: google.maps.MapTypeId.SATELLITE,
+            zoom: 17
+        };
+    var googleMap = new google.maps.Map(document.querySelector('#map'), mapOptions);
 
-    this.locationList = ko.observableArray([]);
+    self.locationList = ko.observableArray([]);
 
     initialLocations.forEach(function(locationItem) {
-        self.locationList().push(new Location(locationItem));
+        self.locationList().push(new Location(locationItem, googleMap));
     })
 
-    this.currentLocation = ko.observable(this.locationList()[0]);
+    self.currentLocation = ko.observable(this.locationList()[0]);
 
-    this.query =  ko.observable('');
+    self.query =  ko.observable('');
 
-    this.filteredItems = ko.computed(function() {
+    self.filteredItems = ko.computed(function() {
         var filter = self.query().toLowerCase();
         if (!filter) {
+            ko.utils.arrayFilter(self.locationList(), function(item) {
+                item.isVisible(true);
+            });
             return self.locationList();
         } else {
             return ko.utils.arrayFilter(self.locationList(), function(item) {
-                //console.log(item.completeAddress().toLowerCase().indexOf(filter.toLowerCase()) >=0);
-                //return ko.utils.stringStartsWith(item.city().toLowerCase(), filter);
-                return item.completeAddress().toLowerCase().indexOf(filter.toLowerCase()) >=0;
+                var match = item.completeAddress().toLowerCase().indexOf(filter.toLowerCase()) >=0;
+                item.isVisible(match);
+                return match;
             });
         }
     });
-    // var map = initializeMap();
-    // if (!map) {
-    //     alert("Error loading Google Maps. Please try again later.");
-    //     return;
-    //   }
-
-    // self.map = ko.observable(map);
-
-    // function initializeMap() {
-    //     var mapOptions = {
-    //         center: new google.maps.LatLng(28.385233,-81.5660627),
+    // var mapOptions = {
+    //         center: new google.maps.LatLng(28.4194019,-81.5814004),
     //         disableDefaultUI: true,
     //         mapTypeId: google.maps.MapTypeId.SATELLITE,
-    //         zoom: 12
+    //         zoom: 17
     //     };
-
-    //     return new google.maps.Map(document.querySelector('#map'), mapOptions);
-    // }
-
-    // function placeMarkers() {
-    //     //console.log(map);
-    //         console.log(map);
-    //     ko.utils.arrayForEach(self.filteredItems(), function(item) {
-    //         //console.log(item);
-    //         //console.log(item.latlng());
-
-    //         var marker = new google.maps.Marker ({
-    //             map: map,
-    //             position: new google.maps.LatLng(item.latlng()),
-    //             title: item.completeAddress()
-    //         });
-    //         console.log(marker);
-    //     });
-    // }
-    // placeMarkers();
+    // var map = new google.maps.Map(document.querySelector('#map'), mapOptions);
+    // self.map = ko.observable(map);
+    // self.filteredItems().forEach(function(item) {
+    // console.log(item);
     // var marker = new google.maps.Marker({
     //         map: map,
-    //         position: new google.maps.LatLng(28.418896, -81.578173),
-    //         title: "Test"
+    //         position: new google.maps.LatLng(item.latlng()[0], item.latlng()[1]),
+    //         title: item.completeAddress()
     //     });
+// })
+
 
 };
 
@@ -118,22 +126,31 @@ var ViewModel = new ViewModel();
 // ko.applyBindings(new ViewModel());
 ko.applyBindings(ViewModel);
 
-var mapOptions = {
-            center: new google.maps.LatLng(28.4194019,-81.5814004),
-            disableDefaultUI: true,
-            mapTypeId: google.maps.MapTypeId.SATELLITE,
-            zoom: 17
-        };
-var map = new google.maps.Map(document.querySelector('#map'), mapOptions);
+    //self.map = ko.observable(map);
+    // ViewModel.filteredItems().forEach(function(item) {
+    //     console.log(item);
+    //     var marker = new google.maps.Marker({
+    //         map: map,
+    //         position: new google.maps.LatLng(item.latlng()[0], item.latlng()[1]),
+    //         title: item.completeAddress()
+    //     });})
 
-ViewModel.filteredItems().forEach(function(item) {
-    console.log(item);
-    var marker = new google.maps.Marker({
-            map: map,
-            position: new google.maps.LatLng(item.latlng()[0], item.latlng()[1]),
-            title: item.completeAddress()
-        });
-})
+// var mapOptions = {
+//             center: new google.maps.LatLng(28.4194019,-81.5814004),
+//             disableDefaultUI: true,
+//             mapTypeId: google.maps.MapTypeId.SATELLITE,
+//             zoom: 17
+//         };
+//var map = new google.maps.Map(document.querySelector('#map'), mapOptions);
+
+// ViewModel.filteredItems().forEach(function(item) {
+//     console.log(item);
+//     var marker = new google.maps.Marker({
+//             map: map,
+//             position: new google.maps.LatLng(item.latlng()[0], item.latlng()[1]),
+//             title: item.completeAddress()
+//         });
+// })
 
 // console.log(ViewModel.filteredItems());
 // var marker = new google.maps.Marker({
