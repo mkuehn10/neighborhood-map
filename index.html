@@ -6,36 +6,24 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Neighborhood Map</title>
-        <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
-
-        <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCFaoc-TrGPpExCvhH3-4WajTKhdyIljXs"></script>
-        <style>
-            #map {
-  display: block;
-  height: 100%;
-  margin: 0 5%;
-}
-
-#mapDiv {
-  height: 400px;
-  width: 100%;
-  padding-bottom: 5%;
-}
-        </style>
+        <link rel="stylesheet" href="css/style.css">
     </head>
 
     <body>
-
-    <!-- <ul id="location-list" data-bind="foreach: locationList()"> -->
-    <ul id="location-list" data-bind="foreach: filteredItems()">
-        <li data-bind="text: completeAddress, click: locationClicked"></li>
-    </ul>
-    <input placeholder="Search…" type="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
-
-        <div id="mapDiv">
-            <div id="map"></div>
+        <div id="container">
+            <div id="nav">
+                <input placeholder="Search…" type="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
+                <ul id="location-list" data-bind="foreach: filteredItems()">
+                    <li data-bind="text: completeAddress, click: locationClicked"></li>
+                </ul>
+            </div>
+            <!-- <div id="mapDiv"> -->
+                <div id="map">
+                </div>
+            <!-- </div> -->
         </div>
-
+        <script src="js/jquery.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCFaoc-TrGPpExCvhH3-4WajTKhdyIljXs"></script>
         <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js'></script>
         <script type='text/javascript' src='js/map.js'></script>
         <!-- Google Analytics -->
