@@ -2,53 +2,48 @@
 
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Neighborhood Map</title>
-        <link rel="stylesheet" href="css/style.css">
-    </head>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Neighborhood Map</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
 
-    <body>
-        <div id="container">
-            <div id="nav">
-                <input placeholder="Search…" type="text" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
-                <ul id="location-list" data-bind="foreach: filteredItems()">
-                    <li data-bind="text: streetAddress, click: locationClicked"></li>
-                </ul>
-            </div>
-            <div id="error"></div>
+<body>
+    <div id="container">
+        <nav id="nav">
+            <input placeholder="Search…" type="text" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
+            <ul id="location-list" data-bind="foreach: filteredItems()">
+                <li data-bind="text: streetAddress, click: locationClicked"></li>
+            </ul>
+        </nav>
+        <section id="error"></section>
 
-            <div id="map"></div>
-        </div>
-        <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
-        <!-- <script src="js/jquery.min.js"></script> -->
-        <script>
-            function googleError() {
-                alert("googleError()")
-            }
-        </script>
-        <script src='js/map.js'></script>
-        <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCFaoc-TrGPpExCvhH3-4WajTKhdyIljXs&callback=initMap" onerror="initMap()" async defer></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js'></script>
+        <section id="map"></section>
+    </div>
 
-        <!-- Google Analytics -->
-        <script>
-            (function(i, s, o, g, r, a, m) {
-                i['GoogleAnalyticsObject'] = r;
-                i[r] = i[r] || function() {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-                a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0];
-                a.async = 1;
-                a.src = g;
-                m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-            ga('create', 'UA-80275020-1', 'auto');
-            ga('send', 'pageview');
-        </script>
-        <!-- End Google Analytics -->
-    </body>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js'></script>
+    <script src='js/map.js'></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCFaoc-TrGPpExCvhH3-4WajTKhdyIljXs&callback=initMap" onerror="initMap()" async defer></script>
+    <!-- Google Analytics -->
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-80275020-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <!-- End Google Analytics -->
+</body>
+
 </html>

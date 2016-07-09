@@ -1,7 +1,7 @@
 # Walt Disney World "Neighborhood Map"
 
 ## How to run the app
-* Clone the repository and open the index.html file
+* Clone the repository and open the index.html file in a browser
 
 OR
 
@@ -19,3 +19,7 @@ http://stackoverflow.com/questions/17961669/how-to-make-a-full-screen-google-map
 http://knockoutjs.com/documentation/introduction.html
 
 http://stackoverflow.com/questions/20857594/knockout-filtering-on-observable-array
+
+## Future Plans
+* Modify the implementation of Info Windows so that there is only one
+* Use the `Marker` object's `setVisible` method instead of using `setMap`
