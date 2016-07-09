@@ -1,4 +1,13 @@
-// initialLocations contains the information on the five locations
+// function initMap() {// initialLocations contains the information on the five locations
+
+
+    // if (typeof google === 'undefined') {
+    //     alert("Google Maps Failed to Load");
+    // } else {
+    //     alert("FAFA")
+    // }
+
+
 var initialLocations = [{
     streetAddress: 'Cinderella Castle',
     city: 'Walt Disney World',
@@ -54,12 +63,12 @@ var Location = function(data, map) {
         'limit': '1'
     });
     var URL = 'https://en.wikipedia.org/w/api.php?' + self.params;
+
     $.ajax({
-            url: URL,
-            timeout: 2000,
-            dataType: 'jsonp',
-            success: function(data) {
-                var dataLength = data[1].length;
+        url: URL,
+        dataType: 'jsonp'
+    }).done(function (data) {
+        var dataLength = data[1].length;
                 for (var i = 0; i < dataLength; i++) {
                     self.wikiInfo = {
                         'title': data[0],
@@ -77,11 +86,16 @@ var Location = function(data, map) {
                 self.infoWindow.addListener('closeclick', function() {
                     self.locationClicked();
                 });
-            }
-        })
-        .error(function() {
-            alert("Error loading Wikipedia data.  Please try again later.");
-        });
+    }).fail(function (jqXHR, textStatus) {
+        console.log(textStatus);
+        $('#error').html('<div id="error">Error Loading Wikipedia.  Please refresh.</div>');
+});
+    //console.log(self.ajaxFailed);
+    //if (self.ajaxFailed) {
+    //    alert("Error loading Wikipedia.  Please try again later.");
+    //}
+
+
     // Set up the location's marker using the data from the initialLocations
     // object
     var marker = new google.maps.Marker({
@@ -101,8 +115,8 @@ var Location = function(data, map) {
     // in the list view.
     this.locationClicked = function() {
         if (!self.infoOpen) {
-            map.setZoom(20);
-            map.panTo(marker.position);
+            //map.setZoom(20);
+            //map.panTo(marker.position);
             self.infoWindow.open(map, marker);
             self.infoOpen = true;
             marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -110,7 +124,7 @@ var Location = function(data, map) {
             self.infoWindow.close();
             self.infoOpen = false;
             marker.setAnimation(null);
-            map.setZoom(16);
+            //map.setZoom(16);
             map.fitBounds(new google.maps.LatLngBounds(
                 new google.maps.LatLng(28.415051, -81.586766),
                 new google.maps.LatLng(28.422288, -81.576917)));
@@ -123,8 +137,10 @@ var Location = function(data, map) {
     self.isVisible.subscribe(function(currentState) {
         if (currentState) {
             marker.setMap(map);
+
         } else {
             marker.setMap(null);
+
         }
     });
 
@@ -137,6 +153,7 @@ var Location = function(data, map) {
 var ViewModel = function() {
     var self = this;
 
+
     // Set up the Google Map
     var mapOptions = {
         center: new google.maps.LatLng(28.419552, -81.582196),
@@ -147,9 +164,7 @@ var ViewModel = function() {
     var googleMap = new google.maps.Map(document.querySelector('#map'),
                                         mapOptions);
 
-    if (!googleMap) {
-        alert("Issue loading Google Maps.  Please try again later.");
-    }
+
 
     var mapBounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(28.415051, -81.586766),
@@ -162,6 +177,9 @@ var ViewModel = function() {
         self.locationList().push(new Location(locationItem, googleMap));
     });
 
+    if (self.locationList()[0].ajaxFailed) {
+        alert("FAILED");
+    }
     // Stores the value of the search box
     self.query = ko.observable('');
 
@@ -183,6 +201,16 @@ var ViewModel = function() {
     });
 };
 
-// Invoke the app
-var ViewModel = new ViewModel();
-ko.applyBindings(ViewModel);
+
+var initMap = function() {
+    if (typeof google === 'undefined') {
+        $('#error').html('<div id="error">Error Loading Google Maps.  Please refresh or try later.</div>');
+    } else {
+        ko.applyBindings(new ViewModel());
+    }
+    //  if (!isMapLoaded) {
+    //     $('#error').html('<div id="error">Error Loading Google Maps.  Please refresh or try later.</div>');
+    // } else {
+    //     ko.applyBindings(new ViewModel());
+    // }
+ }

@@ -55,3 +55,18 @@ body {
     text-decoration: underline;
     cursor: pointer;
 }
+
+#error {
+    z-index: 1;
+    position: relative;
+    top: 0;
+    margin: 0 auto;
+    background-color: #fff;
+    /*border: 1px #000 Solid;*/
+    padding: 5px;
+    /*min-height: 165px;*/
+    width: 320px;
+    text-align: center;
+    color: red;
+    font-size: 25px;
+}
