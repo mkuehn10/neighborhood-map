@@ -66,7 +66,6 @@ var Location = function(data, map) {
                 'href': data[3][0]
             };
         }
-
         self.infoWindow = new google.maps.InfoWindow({
             content: '<div class="info-window"><h3>' +
                 self.wikiInfo.title +
@@ -178,7 +177,6 @@ var ViewModel = function() {
         googleMap.fitBounds(mapBounds);
     });
 };
-
 
 var initMap = function() {
     if (typeof google === 'undefined') {
